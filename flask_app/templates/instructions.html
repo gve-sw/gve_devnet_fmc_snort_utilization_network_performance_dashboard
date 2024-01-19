@@ -1,0 +1,138 @@
+<!-- Instructions page: This page includes information about the frontend template -->
+
+{% extends "masterPage.html" %}
+
+{% block content %}
+<div class="row">
+        
+        <!-- Left Rail -->
+        <!-- Menu element-->
+        {% include "menu.html" %}
+
+        <!-- Middle Rail -->
+        <div class="col-9 col-xl-7 col-md-7">
+            <div class="section" >
+                <div class="panel panel--loose panel--raised base-margin-bottom">
+                    <h2 class="subtitle">Instructions</h2>
+                    <hr>
+                    
+                    <p>
+                        <h2 id="installation-configuration">Installation</h2>
+                        <p>It is recommend to set up your environment as followed, to use this frontend template:</p>
+                        <p>In the CLI:</p>
+                        <ol>
+                            <li>
+                                <p>Choose a folder, then create and activate a virtual environment for the project</p>
+        <pre><code class="lang-python"><span class="hljs-comment">#WINDOWS:</span>
+    py -<span class="hljs-number">3</span> -m venv [<span class="hljs-keyword">add</span><span class="bash"> name of virtual environment here] 
+    </span>source [<span class="hljs-keyword">add</span><span class="bash"> name of virtual environment here]/Scripts/activate
+    </span>
+    <span class="hljs-comment">#MAC:</span>
+    python3 -m venv [<span class="hljs-keyword">add</span><span class="bash"> name of virtual environment here] 
+    </span>source [<span class="hljs-keyword">add</span><span class="bash"> name of virtual environment here]/bin/activate</span>
+    </code></pre>
+                            </li>
+                            <li>
+                                <p>Access the created virtual enviroment folder</p>
+    <pre><code class="lang-python"> cd [add <span class="hljs-keyword">name</span> <span class="hljs-keyword">of</span> <span class="hljs-keyword">virtual</span> environment here]
+    </code></pre>
+                            </li>
+                            <li>
+                                <p>Clone this Github repository into the virtual environment folder.</p>
+    <pre><code class="lang-python">git <span class="hljs-keyword">clone</span> <span class="hljs-title">[add</span> github link here]
+    </code></pre>
+                                <p>For Github link:
+                                    In Github, click on the <strong>Clone or download</strong> button in the upper part of the page &gt; click
+                                    the <strong>copy icon</strong>
+                                    
+                                    <img src="{{ url_for('static', filename='images/giturl.png')}}" alt="/IMAGES/giturl.png"></p>
+                            </li>
+                            <li>
+                                <p>Access the folder <strong>GVE_DevNet_app_template</strong></p>
+    <pre><code class="lang-python"> <span class="hljs-built_in">cd</span> GVE_DevNet_app_template
+    </code></pre>
+                            </li>
+                            <li>
+                                <p>Install dependencies</p>
+    <pre><code class="lang-python">pip <span class="hljs-keyword">install</span> -r requirements.txt
+    </code></pre>
+                            </li>
+                        </ol>
+                        <h2 id="usage">Usage</h2>
+                        <h3 id="structure-of-this-frontend-template">Structure of this frontend template</h3>
+                        <p>This template provides the basic elements and structure of a Cisco prototype. It includes a basic flask app, a bot token scripts, a UI component library and sample template pages.</p>
+                        <ul>
+                            <li>
+                                <p><strong>Masterpage.html:</strong> HTML file that provides header and footer elements for all the template pages.</p>
+                            </li>
+                            <li>
+                                <p><strong>Template Pages:</strong> HTML pages for different use cases. Choose the prefered templates for your own application e.g. login, table, settings, 3 Columns</p>
+                            </li>
+                            <li>
+                                <p><strong>Helper Templates:</strong> HTML files with elements which are used in multiple templates - define it once and use it multiple times. e.g alert, menu.</p>
+                            </li>
+                            <li>
+                                <p><strong>App.py:</strong>  python script with main function and routes</p>
+                            </li>
+                            <li>
+                                <p><strong>Requirements.txt:</strong> file that lists all used python libraries</p>
+                            </li>
+                            <li>
+                                <p><strong>Collage.html, pie.html, bar.html, line.html</strong> html page with all UI components as reference</p>
+                            </li>
+                        </ul>
+                        <h3 id="customization-of-the-template">Customization of the Template</h3>
+                        <p>To create you own prototype based on this template. We suggest you to start with the following steps:
+                        </p>
+                        <h3 id="customization-of-the-template"> Choose the Template</h3>
+                        <p>
+                        This frontend template includes different templates. Choose the ones that fit your needs best. Adapt the app.py file to only include the routes you use and feel free to remove the unused Template Page HTML files. 
+                        </p>
+                        <h4 id="choose-between-the-cisco-and-meraki-design">Choose between the Cisco and Meraki Design</h4>
+                        <p>This template offers a Cisco and a Meraki style. Thereby please comment or uncommend the Cisco Design or Meraki Design sections depending on the style you want to leverage. The sections that require you to choose are marked with a
+                            <strong>&quot;CHOOSE&quot;</strong> comment.
+                            <img src="{{ url_for('static', filename='images/Choose1.png')}}" alt="/IMAGES/0image.png"></p>
+                        <h4 id="add-customized-values-and-titles">Add customized Values and Titles</h4>
+                        <p>To customize the template based on your use case you can e.g. add a title or customize the menues. The sections that require you to fill in text or customize are marked with a <strong>&quot;CUSTOMIZE&quot;</strong> comment.
+                            <img src="{{ url_for('static', filename='images/Choose2.png')}}" alt="/IMAGES/0image.png"></p>
+                        <h4 id="pass-information-to-the-template">Pass Information to the Template</h4>
+                        <p>The frontend template offers the possibility to show, hide or fill elements based on variables passed to the template e.g. hide header links on login page, show/hide error when happening. Elements of this type are marked with a
+                            <strong>&quot;PASS INFO&quot;</strong> comment.
+                            <img src="{{ url_for('static', filename='images/Choose3.png')}}" alt="/IMAGES/0image.png"></p>
+                        <h4 id="pass-information-to-the-template">Environment Variables</h4>
+                        <p>This project contains a .env file in which you can include any keys or credentials.
+                            <img src="{{ url_for('static', filename='images/env_variable.png')}}" alt="/IMAGES/0image.png"></p>
+                        <h4 id="pass-information-to-the-template">Charts JS Library</h4>
+                        <p>Some template html pages contains sample code using Charts javascript library. Change the "type" parameter for different diagrams.
+                            <img src="{{ url_for('static', filename='images/js_charts_example.png')}}" alt="/IMAGES/0image.png"></p>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    <!-- Right Rail -->
+    <div class="col-0 col-xl-3 col-md-2">
+        <div class="section" >
+            <div class="panel panel--loose panel--raised base-margin-bottom">
+                <h2 class="subtitle">Extern Resources</h2>
+                <hr>
+                
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <button href="https://wwwin-github.cisco.com/gve/GVE_DevNet_app_template" class="btn btn--link">GVE DevNet Frontend Template (Github) </button>
+                    </li>
+                    <li class="list-group-item">
+                        <button href="http://swtg-rtp-dev-7/styleguide/index.html" class="btn btn--link">Cisco UI Kit</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button href=" https://www.chartjs.org/docs" class="btn btn--link">Charts.js Documentation</button>
+                    </li>
+
+                    
+                  </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{%  endblock %}

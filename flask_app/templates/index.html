@@ -1,0 +1,688 @@
+{% extends "masterPage.html" %}
+
+{% block content %}
+<div class="content content--alt">
+    <div class="panel panel--loose panel--raised base-margin-top">
+        <div class="container-fluid">
+            <h6 class="display-4">FTD Appliances</h6>
+            <hr>
+            {% if devices is not none and devices %}
+                <!--Build Network Tabs-->
+                <ul id="details" class="tabs tabs--bordered" style="overflow-x: scroll">
+                    <li id="details-0" class="tab active">
+                        <a tabindex="0">{{devices[0].name}}</a>
+                    </li>
+                    {% for device in devices[1:] %}
+                        <li id="details-{{loop.index}}" class="tab">
+                            <a tabindex="0">{{device.name}}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!--Main Content -->
+                <div id="details-content" class="tab-content">
+                    <div id="details-0-content" class="tab-pane active">
+                            <!-- Appliance Details/TE Test Details-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">Appliance Details</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="name-0" type="text" value="{{ devices[0].name }}" readonly>
+                                                            <label for="name-0">Device Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="hostName-0" type="text" value="{{ devices[0].hostName }}" readonly>
+                                                            <label for="hostName-0">Device Hostname</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="perfTier-0" type="text" value="{{ devices[0].performanceTier }}" readonly>
+                                                            <label for="perfTier-0">Performance Tier</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="swVer-0" type="text" value="{{ devices[0].sw_version }}" readonly>
+                                                            <label for="swVer-0">Software Version</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="snortEng-0" type="text" value="{{ devices[0].snortEngine }}" readonly>
+                                                            <label for="snortEng-0">Snort Engine</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="snortVer-0" type="text" value="{{ devices[0].snortVersion }}" readonly>
+                                                            <label for="snortVer-0">Snort Version</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">ThousandEyes Test Details</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="te-test-name-0" type="text" value="{{ devices[0].te_test_details.testName }}" readonly>
+                                                            <label for="te-test-name-0">Test Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="te-type-0" type="text" value="{{ devices[0].te_test_details.type }}" readonly>
+                                                            <label for="te-type-0">Test Type</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="te-server-0" type="text" value="{{ devices[0].te_test_details.server }}" readonly>
+                                                            <label for="te-server-0">Test Target</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            {% if devices[0].te_test_details %}
+                                                                <input id="te-agent-name-0" type="text" value="{{ devices[0].te_test_details.agents[0].agentName }}" readonly>
+                                                                <label for="te-agent-name-0">Agent Name</label>
+                                                            {% else %}
+                                                                <input id="te-agent-name-0" type="text" value="" readonly>
+                                                                <label for="te-agent-name-0">Agent Name</label>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formula Section -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">SNORT CPU vs. ThousandEyes Latency (Test Period: {{test_period}} Seconds)</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h5 class="no-margin-bottom">Snort CPU Average:</h5>
+                                                            <span class="text-size-10">(Max Threshold: {{max_snort_cpu}} %)</span>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                        {% if devices[0].snort_cpu_avg is not none %}
+                                                            {% if devices[0].snort_cpu_avg > max_snort_cpu %}
+                                                                <h5 style="color: red" class="no-margin-bottom">{{devices[0].snort_cpu_avg}} %</h5>
+                                                            {% else %}
+                                                                <h5 style="color: green" class="no-margin-bottom">{{devices[0].snort_cpu_avg}} %</h5>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <h5 class="no-margin-bottom">Unknown</h5>
+                                                        {% endif %}
+
+                                                        {% if devices[0].snort_cpu_max is not none %}
+                                                            {% if devices[0].snort_cpu_max > max_snort_cpu %}
+                                                                <span class="text-size-10"> (24-Hour Max: <span style="color: red;">{{devices[0].snort_cpu_max}} %</span>)</span>
+                                                            {% else %}
+                                                                <span class="text-size-10"> (24-Hour Max: <span style="color: green;">{{devices[0].snort_cpu_max}} %</span>)</span>
+                                                            {% endif %}
+                                                        {% else %}
+                                                                <span class="text-size-10"> (24-Hour Max: <span>Unknown</span>)</span>
+                                                        {% endif %}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h5 class="no-margin-bottom">ThousandEyes Latency Average:</h5>
+                                                            <span class="text-size-10">(Max Threshold: {{max_te_latency}} ms)</span>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                        {% if devices[0].te_latency_avg is not none %}
+                                                            {% if devices[0].te_latency_avg > max_te_latency %}
+                                                                <h5 style="color: red" class="no-margin-bottom">{{devices[0].te_latency_avg}} ms</h5>
+                                                            {% else %}
+                                                                <h5 style="color: green" class="no-margin-bottom">{{devices[0].te_latency_avg}} ms</h5>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <h5 class="no-margin-bottom">Unknown</h5>
+                                                        {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    {% if devices[0].snort_cpu_avg is not none and devices[0].te_latency_avg is not none %}
+                                                        {% if (devices[0].snort_cpu_avg > max_snort_cpu) and (devices[0].te_latency_avg > max_te_latency) %}
+                                                            <div class="alert alert--danger" role="alert">
+                                                                <div class="alert__message">
+                                                                    Snort CPU Usage and ThousandEyes Latency values exceed maximum thresholds.
+                                                                </div>
+                                                            </div>
+                                                        {% elif devices[0].snort_cpu_avg > max_snort_cpu %}
+                                                            <div class="alert alert--warning" role="alert">
+                                                                <div class="alert__message">
+                                                                    Snort CPU Usage value exceeds maximum threshold.
+                                                                </div>
+                                                            </div>
+                                                        {% elif devices[0].te_latency_avg > max_te_latency %}
+                                                            <div class="alert alert--warning" role="alert">
+                                                                <div class="alert__message">
+                                                                    ThousandEyes Latency value exceeds maximum threshold.
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                           <div class="alert alert--success" role="alert">
+                                                                <div class="alert__message">
+                                                                    Snort CPU Usage and ThousandEyes Latency values within acceptable thresholds.
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SNORT CPU Usage, ThousandEyes Test Results-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">Snort CPU Usage</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <canvas id="0-chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">ThousandEyes Test Results</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <canvas id="0-chart-te"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    {% for device in devices[1:] %}
+                    <div id="details-{{loop.index}}-content" class="tab-pane">
+                            <!-- Appliance Details/TE Test Details-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">Appliance Details</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="name-{{loop.index}}" type="text" value="{{ device.name }}" readonly>
+                                                            <label for="name-{{loop.index}}">Device Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="hostName-{{loop.index}}" type="text" value="{{ device.hostName }}" readonly>
+                                                            <label for="hostName-{{loop.index}}">Device Hostname</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="perfTier-{{loop.index}}" type="text" value="{{ device.performanceTier }}" readonly>
+                                                            <label for="perfTier-{{loop.index}}">Performance Tier</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="swVer-{{loop.index}}" type="text" value="{{ device.sw_version }}" readonly>
+                                                            <label for="swVer-{{loop.index}}">Software Version</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="snortEng-{{loop.index}}" type="text" value="{{ device.snortEngine }}" readonly>
+                                                            <label for="snortEng-{{loop.index}}">Snort Engine</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="snortVer-{{loop.index}}" type="text" value="{{ device.snortVersion }}" readonly>
+                                                            <label for="snortVer-{{loop.index}}">Snort Version</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">ThousandEyes Test Details</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="te-test-name-{{loop.index}}" type="text" value="{{ device.te_test_details.testName }}" readonly>
+                                                            <label for="te-test-name-{{loop.index}}">Test Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="te-type-{{loop.index}}" type="text" value="{{ device.te_test_details.type }}" readonly>
+                                                            <label for="te-type-{{loop.index}}">Test Type</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            <input id="te-server-{{loop.index}}" type="text" value="{{ device.te_test_details.server }}" readonly>
+                                                            <label for="te-server-{{loop.index}}">Test Target</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group base-margin-bottom">
+                                                        <div class="form-group__text">
+                                                            {% if device.te_test_details is not none %}
+                                                                <input id="te-agent-name-{{loop.index}}" type="text" value="{{ device.te_test_details.agents[0].agentName }}" readonly>
+                                                                <label for="te-agent-name-{{loop.index}}">Agent Name</label>
+                                                            {% else %}
+                                                               <input id="te-agent-name-{{loop.index}}" type="text" value="" readonly>
+                                                                <label for="te-agent-name-{{loop.index}}">Agent Name</label>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formula Section -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">SNORT CPU vs. ThousandEyes Latency (Test Period: {{test_period}} seconds)</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <h5 class="no-margin-bottom">Snort CPU Average:</h5>
+                                                            <span class="text-size-10">(Max Threshold: {{max_snort_cpu}} %)</span>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                        {% if device.snort_cpu_avg is not none %}
+                                                            {% if device.snort_cpu_avg > max_snort_cpu %}
+                                                                <h5 style="color: red" class="no-margin-bottom">{{device.snort_cpu_avg}} %</h5>
+                                                            {% else %}
+                                                                <h5 style="color: green" class="no-margin-bottom">{{device.snort_cpu_avg}} %</h5>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <h5 class="no-margin-bottom">Unknown</h5>
+                                                        {% endif %}
+
+                                                        {% if device.snort_cpu_max is not none %}
+                                                            {% if device.snort_cpu_max > max_snort_cpu %}
+                                                                <span class="text-size-10"> (24-Hour Max: <span style="color: red;">{{device.snort_cpu_max}} %</span>)</span>
+                                                            {% else %}
+                                                                <span class="text-size-10"> (24-Hour Max: <span style="color: green;">{{device.snort_cpu_max}} %</span>)</span>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <span class="text-size-10"> (24-Hour Max: <span style=>Unknown</span>)</span>
+                                                        {% endif %}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <h5 class="no-margin-bottom">ThousandEyes Latency Average:</h5>
+                                                            <span class="text-size-10">(Max Threshold: {{max_te_latency}} ms)</span>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                        {% if device.te_latency_avg is not none %}
+                                                            {% if device.te_latency_avg > max_te_latency %}
+                                                                <h5 style="color: red" class="no-margin-bottom">{{device.te_latency_avg}} ms</h5>
+                                                            {% else %}
+                                                                <h5 style="color: green" class="no-margin-bottom">{{device.te_latency_avg}} ms</h5>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <h5 class="no-margin-bottom">Unknown</h5>
+                                                        {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    {% if device.snort_cpu_avg is not none and device.te_latency_avg is not none %}
+                                                        {% if (device.snort_cpu_avg > max_snort_cpu) and (device.te_latency_avg > max_te_latency) %}
+                                                            <div class="alert alert--danger" role="alert">
+                                                                <div class="alert__message">
+                                                                    Snort CPU Usage and ThousandEyes Latency values exceed maximum thresholds.
+                                                                </div>
+                                                            </div>
+                                                        {% elif device.snort_cpu_avg > max_snort_cpu %}
+                                                            <div class="alert alert--warning" role="alert">
+                                                                <div class="alert__message">
+                                                                    Snort CPU Usage value exceeds maximum threshold.
+                                                                </div>
+                                                            </div>
+                                                        {% elif device.te_latency_avg > max_te_latency %}
+                                                            <div class="alert alert--warning" role="alert">
+                                                                <div class="alert__message">
+                                                                    ThousandEyes Latency value exceeds maximum threshold.
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                           <div class="alert alert--success" role="alert">
+                                                                <div class="alert__message">
+                                                                    Snort CPU Usage and ThousandEyes Latency values within acceptable thresholds.
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SNORT CPU Usage/ThousandEyes Test Results-->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">Snort CPU Usage</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <canvas id="{{loop.index}}-chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="section">
+                                        <div class="panel panel--loose panel--raised">
+                                            <h2 class="subtitle">ThousandEyes Test Results</h2>
+                                            <hr>
+                                            <div class="row">
+                                                <canvas id="{{loop.index}}-chart-te"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+{% if devices is not none and devices %}
+
+  function drawChart() {
+    var snort_data = {{ devices[0].snort_cpu_data|tojson }}
+
+    new Chart("0-chart", {
+      type: "line",
+      data: {
+        labels: Object.keys(snort_data),
+        datasets: [{
+          borderColor: 'rgb(148,0,211)',
+          data: Object.values(snort_data),
+          fill: false
+        }]
+      },
+      options: {
+        title: {
+          display: false,
+          text: "Snort CPU Usage",
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+            xAxes: [{
+              ticks: {
+                maxTicksLimit: 10 // Show labels for every other data point
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                callback: function(value, index, values) {
+                  return value + '%'; // Add '%' sign to the labels
+                }
+              }
+            }]
+        }
+      }
+    });
+
+    // Create Additional Charts
+    {% for device in devices[1:] %}
+        var snort_data = {{ device.snort_cpu_data|tojson }}
+
+        new Chart("{{loop.index}}-chart", {
+          type: "line",
+          data: {
+            labels: Object.keys(snort_data),
+            datasets: [{
+              borderColor: 'rgb(148,0,211)',
+              data: Object.values(snort_data),
+              fill: false
+            }]
+          },
+          options: {
+            title: {
+              display: false,
+              text: "Snort CPU Usage",
+            },
+            legend: {
+              display: false
+            },
+            scales: {
+                xAxes: [{
+                  ticks: {
+                    maxTicksLimit: 10 // Show labels for every other data point
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    callback: function(value, index, values) {
+                      return value + '%'; // Add '%' sign to the labels
+                    }
+                  }
+                }]
+            }
+          }
+        });
+    {% endfor %}
+  }
+
+    function drawChartTE() {
+        var te_data = {{ devices[0].te_test_data|tojson }}
+
+        var avgLatency = Object.values(te_data).map(list => list[0]);
+        var loss = Object.values(te_data).map(list => list[1]);
+        var jitter = Object.values(te_data).map(list => list[2]);
+
+        new Chart("0-chart-te", {
+          type: "line",
+          data: {
+            labels: Object.keys(te_data),
+            datasets: [
+            {
+              borderColor: 'rgb(255,140,0)',
+              data: avgLatency,
+              fill: false,
+              label: 'Average Latency (ms)'
+            },
+            {
+              borderColor: 'rgb(148,0,211)',
+              data: loss,
+              fill: false,
+              label: 'Loss (%)'
+            },
+            {
+              borderColor: 'rgb(255,0,0)',
+              data: jitter,
+              fill: false,
+              label: 'Jitter (ms)'
+
+            }
+
+            ]
+          },
+          options: {
+            title: {
+              display: false,
+              text: "ThousandEyes Network Test Results",
+            },
+            legend: {
+              display: true
+            },
+            scales: {
+                xAxes: [{
+                  ticks: {
+                    maxTicksLimit: 10 // Show labels for every other data point
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    callback: function(value, index, values) {
+                      return value;
+                    }
+                  }
+                }]
+            }
+          }
+        });
+
+        // Create Additional Charts
+        {% for device in devices[1:] %}
+            var te_data = {{ device.te_test_data|tojson }}
+
+            var avgLatency = Object.values(te_data).map(list => list[0]);
+            var loss = Object.values(te_data).map(list => list[1]);
+            var jitter = Object.values(te_data).map(list => list[2]);
+
+            new Chart("{{loop.index}}-chart-te", {
+              type: "line",
+              data: {
+                labels: Object.keys(te_data),
+                datasets: [
+                {
+                  borderColor: 'rgb(255,140,0)',
+                  data: avgLatency,
+                  fill: false,
+                  label: 'Average Latency (ms)'
+                },
+                {
+                  borderColor: 'rgb(148,0,211)',
+                  data: loss,
+                  fill: false,
+                  label: 'Loss (%)'
+                },
+                {
+                  borderColor: 'rgb(255,0,0)',
+                  data: jitter,
+                  fill: false,
+                  label: 'Jitter (ms)'
+
+                }
+
+                ]
+              },
+              options: {
+                title: {
+                  display: false,
+                  text: "ThousandEyes Network Test Results",
+                },
+                legend: {
+                  display: true
+                },
+                scales: {
+                    xAxes: [{
+                      ticks: {
+                        maxTicksLimit: 10 // Show labels for every other data point
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        callback: function(value, index, values) {
+                          return value;
+                        }
+                      }
+                    }]
+                }
+              }
+            });
+        {% endfor %}
+    }
+
+  drawChart()
+  drawChartTE()
+
+{% endif %}
+
+  // Reload the page every config.TIME_PERIOD_SECONDS (to get fresh data, fresh devices, etc.)
+    setInterval(function() {
+        location.reload();
+    }, {{test_period}}  * 1000);
+
+</script>
+{% endblock %}

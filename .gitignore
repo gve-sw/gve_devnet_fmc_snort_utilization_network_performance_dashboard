@@ -1,0 +1,14 @@
+# Environment
+venv
+
+# Sensitive Files
+.env
+config.py
+
+# Log files
+flask_app/logs/*.*
+
+# IDE files
+.idea
+__pycache__
+
