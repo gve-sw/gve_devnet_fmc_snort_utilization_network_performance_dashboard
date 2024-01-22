@@ -99,18 +99,15 @@ class FirePower:
         self.logger.error(f"Unable to find any device records...")
         return None
 
-    def getHealthMetrics(self, time_period_seconds, device_uuids, metric, regex_filter):
+    def getHealthMetrics(self, time_period_seconds, device_uuid, metric, regex_filter):
         """
         Return health monitor metrics for device(s) for a specific metric
         """
         startTime, endTime = calculate_health_time_period_unix(time_period_seconds)
 
-        # Create ';' separated string of device uuids
-        device_uuids_string = ';'.join(device_uuids)
-
         url = f"{CONFIG_URL}/domain/{self.global_UUID}/health/metrics"
         params = {
-            "filter": f"deviceUUIDs:{device_uuids_string};metric:{metric};startTime:{startTime};endTime:{endTime};step:60;regexFilter:{regex_filter}", "limit": 1000}
+            "filter": f"deviceUUIDs:{device_uuid};metric:{metric};startTime:{startTime};endTime:{endTime};step:60;regexFilter:{regex_filter}", "limit": 1000}
 
         resp = self.getData(url, params)
 

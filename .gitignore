@@ -11,4 +11,4 @@ flask_app/logs/*.*
 # IDE files
 .idea
 __pycache__
-
+.DS_Store

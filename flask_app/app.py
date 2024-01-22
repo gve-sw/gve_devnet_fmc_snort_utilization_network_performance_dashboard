@@ -130,11 +130,16 @@ def get_health_metrics(time_period_seconds, device_uuids, metric, regexFilter):
     :param regexFilter: An additional filter to further specify the metric data (ex: metric = cpu, regexFilter = snort_avg)
     :return: dictionary mapping FTD device uuid -> raw metric data returned (format [[time_stamp_seconds, data_value], ...])
     """
-    # Get health metric data for specific metric
-    health_metrics = fmc.getHealthMetrics(int(time_period_seconds), device_uuids, metric, regexFilter)
+    # Get health metric data for specific metric for each device_uuid
+    health_metrics = []
+    for device_uuid in device_uuids:
+        health_metric = fmc.getHealthMetrics(int(time_period_seconds), device_uuid, metric, regexFilter)
 
-    if health_metrics:
-        metrics = {}
+        if health_metric:
+            health_metrics.append(health_metric[0])
+
+    if len(health_metrics) > 0:
+        device_uuid_to_metrics = {}
         for health_metric in health_metrics:
             # Extract metric data returned
             try:
@@ -144,16 +149,16 @@ def get_health_metrics(time_period_seconds, device_uuids, metric, regexFilter):
                 raw_data = metric_data['data']['result'][0]['values']
 
                 # Create mapping of device uuid to raw data
-                metrics[health_metric['deviceUUID']] = raw_data
+                device_uuid_to_metrics[health_metric['deviceUUID']] = raw_data
             except Exception as e:
                 logger.error(
                     f"Unable to find Health metric data for metric ({metric}), in devices: {health_metric['deviceUUID']}")
                 logger.error(f"Error: {str(e)}")
 
-        logger.info(f"Successfully found health metrics for the following devices: {list(metrics.keys())} with the "
+        logger.info(f"Successfully found health metrics for the following devices: {list(device_uuid_to_metrics.keys())} with the "
                     f"following query parameters: Time Period ({time_period_seconds}), Metric ({metric}), "
                     f"Regex Filter ({regexFilter})")
-        return metrics
+        return device_uuid_to_metrics
 
     return None
 
@@ -405,6 +410,9 @@ def index():
             else:
                 # No data found for some reason
                 device['te_latency_avg'] = None
+
+        # Sort FTD Devices by Name
+        devices = sorted(devices, key=lambda device: device['name'])
 
     return render_template('index.html', hiddenLinks=False, timeAndLocation=getSystemTimeAndLocation(), devices=devices,
                            max_snort_cpu=int(config.MAX_SNORT_UTILIZATION), max_te_latency=int(config.MAX_TE_LATENCY),
